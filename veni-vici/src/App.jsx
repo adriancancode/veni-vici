@@ -11,8 +11,8 @@ function App() {
     const fetchDogs = async () => {
       try {
         const response = await fetch(url);
-        const data = await response.json();
-        setData(data);
+        const result = await response.json();
+        setData(result);
       } catch (error) {
         console.error("Error fetching dogs:", error);
       } finally {
@@ -21,8 +21,10 @@ function App() {
     };
 
     fetchDogs();
-  }, []);
+  }, [url]);
 
+    
+  
   if (loading){
     return (
       <div>
@@ -30,15 +32,16 @@ function App() {
       </div>
     );
   }
-
-    
   
   return (
     <div>
       <h1>Pick-a-Pup</h1>
       <h2>Find your ideal dog with this app.</h2>
-
-      {loading ? <img src={data.url} alt="Cute dog picture from TheDogAPI"/> : <p>Loading image</p>}
+      {data.length > 0 ? (
+        <img src={data[0].url} alt="Cute dog picture from TheDogAPI"/>
+      ) : (
+        <p>No dog images found</p>
+      )}
     </div>
   )
 }
