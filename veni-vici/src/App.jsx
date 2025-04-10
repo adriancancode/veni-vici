@@ -3,14 +3,21 @@ import './App.css'
 
 
 function App() {
-  const api_key = process.env.API_KEY;
+  const api_key = import.meta.env.VITE_API_KEY;
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const url = `https://api.thedogapi.com/v1/images/search?api_key=${api_key}`;
   useEffect(() => {
+    console.log("Fetching from API.  Url: ", url);
     const fetchDogs = async () => {
       try {
+        console.log("fetching data...");
         const response = await fetch(url);
+        console.log("response status: ", response.status);
+        if (!response.ok) {
+          throw new Error(`API responded with status: ${response.status}`);
+        }
         const result = await response.json();
         setData(result);
       } catch (error) {
@@ -21,7 +28,7 @@ function App() {
     };
 
     fetchDogs();
-  }, [url]);
+  }, []);
 
     
   
